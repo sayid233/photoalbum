@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>后台管理 / Lin Zhao Photography</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="admin">
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="返回首页"><span class="brand-mark"></span><span>Lin Zhao</span></a>
+    <nav aria-label="主导航">
+      <a href="./works.html">作品</a>
+      <a href="./journal.html">手记</a>
+      <a href="./contact.html">联系</a>
+      <a class="active" href="./admin.html">后台</a>
+    </nav>
+  </header>
+  <main class="page-shell admin-shell">
+    <section class="page-hero">
+      <p class="eyebrow">Admin</p>
+      <h1>内容后台</h1>
+      <p>输入 GitHub token 后，可上传作品图片、添加手记、更新联系信息。提交后 GitHub Pages 会自动重新部署。</p>
+    </section>
+
+    <section class="admin-grid">
+      <form class="admin-card" data-admin="settings">
+        <h2>连接 GitHub</h2>
+        <label>Owner <input name="owner" value="sayid233"></label>
+        <label>Repo <input name="repo" value="photoalbum"></label>
+        <label>Branch <input name="branch" value="main"></label>
+        <label>Token <input name="token" type="password" autocomplete="off" placeholder="需要 contents:write 权限"></label>
+        <label class="check-row"><input name="remember" type="checkbox"> 仅保存在当前浏览器</label>
+        <button class="btn primary" type="submit">保存连接</button>
+      </form>
+
+      <form class="admin-card" data-admin="work">
+        <h2>上传作品</h2>
+        <label>标题 <input name="title" required></label>
+        <label>地点/年份 <input name="place" placeholder="Shanghai, 2026"></label>
+        <label>分类
+          <select name="category">
+            <option value="travel">旅行</option>
+            <option value="portrait">人像</option>
+            <option value="city">城市</option>
+          </select>
+        </label>
+        <label>排版
+          <select name="layout">
+            <option value="">自动</option>
+            <option value="wide">横向大图</option>
+            <option value="tall">纵向大图</option>
+          </select>
+        </label>
+        <label class="check-row"><input name="featured" type="checkbox" checked> 首页精选</label>
+        <label>图片 <input name="image" type="file" accept="image/*" required></label>
+        <button class="btn primary" type="submit">上传并发布</button>
+      </form>
+
+      <form class="admin-card" data-admin="note">
+        <h2>新增手记</h2>
+        <label>标题 <input name="title" required></label>
+        <label>日期 <input name="date" type="date"></label>
+        <label>内容 <textarea name="body" rows="6" required></textarea></label>
+        <label class="check-row"><input name="featured" type="checkbox" checked> 首页显示</label>
+        <button class="btn primary" type="submit">发布手记</button>
+      </form>
+
+      <form class="admin-card" data-admin="profile">
+        <h2>联系信息</h2>
+        <label>邮箱 <input name="email"></label>
+        <label>电话 <input name="phone"></label>
+        <label>常驻城市 <input name="city"></label>
+        <label>首页介绍 <textarea name="intro" rows="4"></textarea></label>
+        <button class="btn primary" type="submit">更新资料</button>
+      </form>
+    </section>
+    <pre class="admin-log" data-admin-log>等待操作...</pre>
+  </main>
+  <script src="./data/site-data.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

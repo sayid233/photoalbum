@@ -1,16 +1,187 @@
+const data = window.SITE_DATA;
+const page = document.body.dataset.page;
 const glow = document.querySelector(".cursor-glow");
 const hero = document.querySelector("[data-parallax]");
-const cards = [...document.querySelectorAll(".photo-card")];
-const filters = [...document.querySelectorAll(".filter")];
 const lightbox = document.querySelector(".lightbox");
-const lightboxImg = lightbox.querySelector("img");
-const lightboxTitle = lightbox.querySelector("strong");
-const lightboxPlace = lightbox.querySelector("span");
+const state = { filter: "all", page: 1 };
+const pageSizes = { works: 8, journal: 6 };
 
 let mouseX = innerWidth / 2;
 let mouseY = innerHeight / 2;
 let glowX = mouseX;
 let glowY = mouseY;
+
+function text(value) {
+  return value || "";
+}
+
+function slugLabel(category) {
+  return { travel: "旅行", portrait: "人像", city: "城市" }[category] || "作品";
+}
+
+function fillProfile() {
+  document.querySelectorAll("[data-profile]").forEach((node) => {
+    node.textContent = text(data.profile[node.dataset.profile]);
+  });
+  document.querySelectorAll("[data-profile-image]").forEach((node) => {
+    node.src = data.profile[node.dataset.profileImage];
+  });
+  document.querySelectorAll("[data-contact='email']").forEach((node) => {
+    node.textContent = data.profile.email;
+    node.href = `mailto:${data.profile.email}`;
+  });
+  document.querySelectorAll("[data-contact='phone']").forEach((node) => {
+    node.textContent = data.profile.phone;
+  });
+  document.querySelectorAll("[data-contact='city']").forEach((node) => {
+    node.textContent = data.profile.city;
+  });
+  const categories = new Set(data.works.map((item) => item.category));
+  const stats = {
+    works: data.works.length,
+    categories: categories.size,
+    notes: data.notes.length
+  };
+  document.querySelectorAll("[data-stat]").forEach((node) => {
+    node.textContent = stats[node.dataset.stat] || 0;
+  });
+}
+
+function workCard(item) {
+  const article = document.createElement("article");
+  article.className = `photo-card ${item.layout || ""}`.trim();
+  article.dataset.category = item.category;
+  article.innerHTML = `
+    <button class="photo-button" type="button" data-title="${text(item.title)}" data-place="${text(item.place)}">
+      <img src="${item.image}" alt="${text(item.alt || item.title)}" loading="lazy">
+      <span class="photo-meta">
+        <b>${text(item.title)}</b>
+        <small>${text(item.place)} · ${slugLabel(item.category)}</small>
+      </span>
+    </button>
+  `;
+  return article;
+}
+
+function noteCard(item, index) {
+  const article = document.createElement("article");
+  article.innerHTML = `
+    <span>${String(index + 1).padStart(2, "0")}</span>
+    <h3>${text(item.title)}</h3>
+    <time>${text(item.date)}</time>
+    <p>${text(item.body)}</p>
+  `;
+  return article;
+}
+
+function paginate(items, size) {
+  const total = Math.max(1, Math.ceil(items.length / size));
+  state.page = Math.min(state.page, total);
+  const start = (state.page - 1) * size;
+  return { total, items: items.slice(start, start + size) };
+}
+
+function renderPager(total, onChange) {
+  const pager = document.querySelector("[data-pager]");
+  if (!pager) return;
+  pager.innerHTML = "";
+  if (total <= 1) return;
+  for (let index = 1; index <= total; index += 1) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `page-btn ${index === state.page ? "active" : ""}`;
+    button.textContent = index;
+    button.addEventListener("click", () => {
+      state.page = index;
+      onChange();
+      scrollTo({ top: 0, behavior: "smooth" });
+    });
+    pager.append(button);
+  }
+}
+
+function bindCards(root = document) {
+  root.querySelectorAll(".photo-button").forEach((button) => {
+    button.addEventListener("pointermove", (event) => {
+      const rect = button.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      button.style.setProperty("--rx", `${(-y * 5).toFixed(2)}deg`);
+      button.style.setProperty("--ry", `${(x * 5).toFixed(2)}deg`);
+    });
+    button.addEventListener("pointerleave", () => {
+      button.style.setProperty("--rx", "0deg");
+      button.style.setProperty("--ry", "0deg");
+    });
+    button.addEventListener("click", () => openLightbox(button));
+  });
+}
+
+function openLightbox(button) {
+  if (!lightbox) return;
+  const image = button.querySelector("img");
+  lightbox.querySelector("img").src = image.src.replace(/w=\d+/, "w=1800");
+  lightbox.querySelector("img").alt = image.alt;
+  lightbox.querySelector("strong").textContent = button.dataset.title;
+  lightbox.querySelector("span").textContent = button.dataset.place;
+  lightbox.showModal();
+}
+
+function renderGallery() {
+  const gallery = document.querySelector("[data-gallery]");
+  if (!gallery) return;
+  const mode = gallery.dataset.gallery;
+  let items = mode === "featured" ? data.works.filter((item) => item.featured).slice(0, 6) : data.works;
+  if (mode === "all" && state.filter !== "all") {
+    items = items.filter((item) => item.category === state.filter);
+  }
+  const pageData = mode === "all" ? paginate(items, pageSizes.works) : { total: 1, items };
+  gallery.innerHTML = "";
+  pageData.items.forEach((item) => gallery.append(workCard(item)));
+  bindCards(gallery);
+  if (mode === "all") renderPager(pageData.total, renderGallery);
+}
+
+function renderNotes() {
+  const track = document.querySelector("[data-notes]");
+  if (!track) return;
+  const mode = track.dataset.notes;
+  const items = mode === "featured" ? data.notes.filter((item) => item.featured).slice(0, 3) : data.notes;
+  const pageData = mode === "all" ? paginate(items, pageSizes.journal) : { total: 1, items };
+  track.innerHTML = "";
+  pageData.items.forEach((item, index) => track.append(noteCard(item, index + (state.page - 1) * pageSizes.journal)));
+  if (mode === "all") renderPager(pageData.total, renderNotes);
+}
+
+function bindFilters() {
+  document.querySelectorAll(".filter").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.filter = button.dataset.filter;
+      state.page = 1;
+      document.querySelectorAll(".filter").forEach((item) => item.classList.toggle("active", item === button));
+      renderGallery();
+    });
+  });
+}
+
+function bindChrome() {
+  addEventListener("pointermove", (event) => {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+  });
+  addEventListener("scroll", () => {
+    if (hero) hero.style.setProperty("--shift", scrollY.toFixed(0));
+  }, { passive: true });
+  if (lightbox) {
+    lightbox.querySelector(".close").addEventListener("click", () => lightbox.close());
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) lightbox.close();
+    });
+  }
+  addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && lightbox?.open) lightbox.close();
+  });
+}
 
 function animateGlow() {
   glowX += (mouseX - glowX) * 0.12;
@@ -19,60 +190,9 @@ function animateGlow() {
   requestAnimationFrame(animateGlow);
 }
 
-addEventListener("pointermove", (event) => {
-  mouseX = event.clientX;
-  mouseY = event.clientY;
-});
-
-addEventListener("scroll", () => {
-  if (hero) hero.style.setProperty("--shift", scrollY.toFixed(0));
-}, { passive: true });
-
-filters.forEach((button) => {
-  button.addEventListener("click", () => {
-    const filter = button.dataset.filter;
-    filters.forEach((item) => item.classList.toggle("active", item === button));
-    cards.forEach((card, index) => {
-      const show = filter === "all" || card.dataset.category === filter;
-      card.style.transitionDelay = `${index * 35}ms`;
-      card.classList.toggle("hidden", !show);
-    });
-  });
-});
-
-cards.forEach((card) => {
-  const button = card.querySelector(".photo-button");
-
-  button.addEventListener("pointermove", (event) => {
-    const rect = button.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    button.style.setProperty("--rx", `${(-y * 5).toFixed(2)}deg`);
-    button.style.setProperty("--ry", `${(x * 5).toFixed(2)}deg`);
-  });
-
-  button.addEventListener("pointerleave", () => {
-    button.style.setProperty("--rx", "0deg");
-    button.style.setProperty("--ry", "0deg");
-  });
-
-  button.addEventListener("click", () => {
-    const image = button.querySelector("img");
-    lightboxImg.src = image.src.replace(/w=\d+/, "w=1600");
-    lightboxImg.alt = image.alt;
-    lightboxTitle.textContent = button.dataset.title;
-    lightboxPlace.textContent = button.dataset.place;
-    lightbox.showModal();
-  });
-});
-
-lightbox.querySelector(".close").addEventListener("click", () => lightbox.close());
-lightbox.addEventListener("click", (event) => {
-  if (event.target === lightbox) lightbox.close();
-});
-
-addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && lightbox.open) lightbox.close();
-});
-
-animateGlow();
+fillProfile();
+bindChrome();
+bindFilters();
+renderGallery();
+renderNotes();
+if (glow) animateGlow();

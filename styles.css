@@ -101,6 +101,7 @@ nav a {
 }
 
 nav a:hover { color: var(--ink); }
+nav a.active { color: var(--ink); }
 
 .hero {
   position: relative;
@@ -170,7 +171,8 @@ h2 {
 }
 
 .btn,
-.contact-link {
+.contact-link,
+.text-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -278,9 +280,15 @@ footer {
 
 .gallery {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-auto-rows: 15rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  grid-auto-rows: clamp(13rem, 22vw, 18rem);
   gap: .9rem;
+  grid-auto-flow: dense;
+}
+
+.gallery.archive {
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  grid-auto-rows: clamp(14rem, 24vw, 20rem);
 }
 
 .photo-card {
@@ -391,6 +399,13 @@ footer {
   line-height: 1.7;
 }
 
+.note-track time {
+  display: block;
+  margin-bottom: .85rem;
+  color: var(--gold);
+  font-size: .82rem;
+}
+
 footer {
   display: flex;
   align-items: end;
@@ -401,6 +416,141 @@ footer {
 
 footer h2 {
   max-width: 9ch;
+}
+
+.page-shell {
+  padding: clamp(7rem, 11vw, 10rem) clamp(1rem, 4vw, 4rem) clamp(4rem, 8vw, 7rem);
+}
+
+.page-hero {
+  display: grid;
+  gap: 1rem;
+  min-height: 34svh;
+  align-content: end;
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.page-hero h1 {
+  margin: 0;
+  max-width: none;
+  font-size: clamp(3rem, 8vw, 7.6rem);
+}
+
+.page-hero p:not(.eyebrow) {
+  max-width: 680px;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.7;
+}
+
+.compact {
+  padding: 0;
+}
+
+.pager {
+  display: flex;
+  justify-content: center;
+  gap: .55rem;
+  margin-top: 1.4rem;
+}
+
+.page-btn {
+  width: 2.55rem;
+  height: 2.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255,255,255,.06);
+  cursor: pointer;
+}
+
+.page-btn.active {
+  background: var(--paper);
+  color: #191612;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .9rem;
+}
+
+.contact-grid article,
+.admin-card {
+  padding: 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255,255,255,.045);
+}
+
+.contact-grid span,
+.admin-card label {
+  display: block;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.contact-grid a,
+.contact-grid p {
+  display: block;
+  margin: .8rem 0 0;
+  color: var(--ink);
+  font-size: clamp(1.15rem, 2vw, 1.65rem);
+  overflow-wrap: anywhere;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .9rem;
+}
+
+.admin-card {
+  display: grid;
+  gap: .85rem;
+}
+
+.admin-card h2 {
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.admin-card input,
+.admin-card select,
+.admin-card textarea {
+  width: 100%;
+  margin-top: .38rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(0,0,0,.26);
+  color: var(--ink);
+  padding: .75rem .8rem;
+  font: inherit;
+}
+
+.admin-card textarea {
+  resize: vertical;
+}
+
+.check-row {
+  display: flex !important;
+  align-items: center;
+  gap: .55rem;
+}
+
+.check-row input {
+  width: auto;
+  margin: 0;
+}
+
+.admin-log {
+  white-space: pre-wrap;
+  margin: 1rem 0 0;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(0,0,0,.28);
+  color: var(--muted);
+  overflow: auto;
 }
 
 .lightbox {
@@ -485,7 +635,9 @@ footer h2 {
     grid-auto-rows: 13rem;
   }
 
-  .note-track {
+  .note-track,
+  .contact-grid,
+  .admin-grid {
     grid-template-columns: 1fr;
   }
 }

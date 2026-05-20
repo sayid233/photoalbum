@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="全部摄影作品">
+  <title>全部作品 / Lin Zhao Photography</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="works">
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="返回首页"><span class="brand-mark"></span><span data-profile="name">Lin Zhao</span></a>
+    <nav aria-label="主导航">
+      <a class="active" href="./works.html">作品</a>
+      <a href="./journal.html">手记</a>
+      <a href="./contact.html">联系</a>
+      <a href="./admin.html">后台</a>
+    </nav>
+  </header>
+  <main class="page-shell">
+    <section class="page-hero">
+      <p class="eyebrow">Archive</p>
+      <h1>全部作品</h1>
+      <p>按分类浏览完整作品归档，页面会根据屏幕宽度自动调整图片大小和排版。</p>
+    </section>
+    <section class="work compact">
+      <div class="filters" role="tablist" aria-label="作品分类">
+        <button class="filter active" type="button" data-filter="all">全部</button>
+        <button class="filter" type="button" data-filter="travel">旅行</button>
+        <button class="filter" type="button" data-filter="portrait">人像</button>
+        <button class="filter" type="button" data-filter="city">城市</button>
+      </div>
+      <div class="gallery archive" data-gallery="all" aria-live="polite"></div>
+      <div class="pager" data-pager></div>
+    </section>
+  </main>
+  <dialog class="lightbox" aria-label="作品预览">
+    <button class="close" type="button" aria-label="关闭预览">x</button>
+    <img alt="">
+    <div class="lightbox-caption"><strong></strong><span></span></div>
+  </dialog>
+  <script src="./data/site-data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
