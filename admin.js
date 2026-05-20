@@ -1,5 +1,6 @@
 const DATA_PATH = "data/site-data.js";
 const logNode = document.querySelector("[data-admin-log]");
+const managerNode = document.querySelector("[data-work-manager]");
 let config = JSON.parse(localStorage.getItem("photoAdminConfig") || "{}");
 let siteData = structuredClone(window.SITE_DATA);
 
@@ -28,6 +29,35 @@ function fillForms() {
   profile.phone.value = siteData.profile.phone || "";
   profile.city.value = siteData.profile.city || "";
   profile.intro.value = siteData.profile.intro || "";
+}
+
+function categoryLabel(category) {
+  return { travel: "旅行", portrait: "人像", city: "城市" }[category] || category;
+}
+
+function imagePathFromUrl(value) {
+  if (!value) return "";
+  if (value.startsWith("./")) return value.slice(2);
+  if (value.startsWith("/")) return value.slice(1);
+  return "";
+}
+
+function renderWorkManager() {
+  if (!managerNode) return;
+  managerNode.innerHTML = "";
+  siteData.works.forEach((work) => {
+    const item = document.createElement("article");
+    item.className = "work-row";
+    item.innerHTML = `
+      <img src="${work.image}" alt="${work.alt || work.title}" loading="lazy">
+      <div>
+        <strong>${work.title}</strong>
+        <span>${work.place || "未填写地点"} · ${categoryLabel(work.category)}${work.featured ? " · 首页精选" : ""}</span>
+      </div>
+      <button class="danger-btn" type="button" data-delete-work="${work.id}">删除</button>
+    `;
+    managerNode.append(item);
+  });
 }
 
 function saveConfig(form) {
@@ -97,6 +127,17 @@ async function putFile(path, content, message, sha) {
   });
 }
 
+async function deleteFile(path, message, sha) {
+  return github(path, {
+    method: "DELETE",
+    body: JSON.stringify({
+      message,
+      sha,
+      branch: config.branch
+    })
+  });
+}
+
 function serializeData() {
   return `window.SITE_DATA = ${JSON.stringify(siteData, null, 2)};\n`;
 }
@@ -130,7 +171,29 @@ async function uploadWork(form) {
   log("图片已上传，正在更新作品数据...");
   await publishData(`Add work: ${form.title.value}`);
   form.reset();
+  renderWorkManager();
   log("作品已发布。GitHub Pages 通常会在 1 分钟左右更新。");
+}
+
+async function deleteWork(id) {
+  const work = siteData.works.find((item) => item.id === id);
+  if (!work) throw new Error("没有找到这张作品。");
+  const confirmed = confirm(`确定删除作品「${work.title}」吗？这个操作会提交到 GitHub。`);
+  if (!confirmed) return;
+
+  const path = imagePathFromUrl(work.image);
+  siteData.works = siteData.works.filter((item) => item.id !== id);
+
+  if (path.startsWith("assets/uploads/")) {
+    log("正在删除上传图片...");
+    const imageSha = await getSha(path);
+    await deleteFile(path, `Delete work image: ${work.title}`, imageSha);
+  }
+
+  log("正在更新作品数据...");
+  await publishData(`Delete work: ${work.title}`);
+  renderWorkManager();
+  log("作品已删除。GitHub Pages 通常会在 1 分钟左右更新。");
 }
 
 async function addNote(form) {
@@ -190,4 +253,20 @@ document.querySelector("[data-admin='profile']").addEventListener("submit", asyn
   }
 });
 
+managerNode?.addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-delete-work]");
+  if (!button) return;
+  try {
+    await deleteWork(button.dataset.deleteWork);
+  } catch (error) {
+    log(`删除失败：${error.message}`);
+  }
+});
+
+document.querySelector("[data-refresh-works]")?.addEventListener("click", () => {
+  renderWorkManager();
+  log("作品列表已刷新。");
+});
+
 fillForms();
+renderWorkManager();

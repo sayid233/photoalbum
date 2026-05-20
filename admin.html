@@ -13,7 +13,6 @@
       <a href="./works.html">作品</a>
       <a href="./journal.html">手记</a>
       <a href="./contact.html">联系</a>
-      <a class="active" href="./admin.html">后台</a>
     </nav>
   </header>
   <main class="page-shell admin-shell">
@@ -74,6 +73,17 @@
         <label>首页介绍 <textarea name="intro" rows="4"></textarea></label>
         <button class="btn primary" type="submit">更新资料</button>
       </form>
+    </section>
+
+    <section class="admin-card manager-card">
+      <div class="manager-head">
+        <div>
+          <p class="eyebrow">Manager</p>
+          <h2>作品管理</h2>
+        </div>
+        <button class="btn ghost" type="button" data-refresh-works>刷新列表</button>
+      </div>
+      <div class="work-manager" data-work-manager></div>
     </section>
     <pre class="admin-log" data-admin-log>等待操作...</pre>
   </main>
