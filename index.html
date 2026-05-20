@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="个人摄影作品展示网站">
+  <title>Lin Zhao Photography</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="返回首页">
+      <span class="brand-mark"></span>
+      <span>Lin Zhao</span>
+    </a>
+    <nav aria-label="主导航">
+      <a href="#work">作品</a>
+      <a href="#journal">手记</a>
+      <a href="#contact">联系</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" data-parallax>
+      <img
+        src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=72"
+        alt="山谷清晨光线中的摄影作品"
+      >
+      <div class="hero-copy">
+        <p class="eyebrow">Editorial / Travel / Portrait</p>
+        <h1>把安静的瞬间，拍成有回声的光。</h1>
+        <div class="hero-actions">
+          <a class="btn primary" href="#work">看作品</a>
+          <a class="btn ghost" href="#contact">预约拍摄</a>
+        </div>
+      </div>
+      <div class="hero-strip" aria-label="精选数据">
+        <span><strong>48</strong> 组作品</span>
+        <span><strong>12</strong> 个城市</span>
+        <span><strong>6</strong> 年记录</span>
+      </div>
+    </section>
+
+    <section class="intro" aria-label="摄影师简介">
+      <p>
+        专注自然光、城市边缘与人物情绪。作品追求克制的构图和不抢戏的色彩，
+        让观看者先感到空气，再看见故事。
+      </p>
+      <div class="signal-line" aria-hidden="true"></div>
+    </section>
+
+    <section id="work" class="work">
+      <div class="section-head">
+        <p class="eyebrow">Selected Frames</p>
+        <h2>作品集</h2>
+      </div>
+      <div class="filters" role="tablist" aria-label="作品分类">
+        <button class="filter active" type="button" data-filter="all">全部</button>
+        <button class="filter" type="button" data-filter="travel">旅行</button>
+        <button class="filter" type="button" data-filter="portrait">人像</button>
+        <button class="filter" type="button" data-filter="city">城市</button>
+      </div>
+      <div class="gallery" aria-live="polite">
+        <article class="photo-card wide" data-category="travel">
+          <button class="photo-button" type="button" data-title="Mist Ridge" data-place="Yunnan, 2025">
+            <img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1200&q=70" alt="雾气中的湖与山脊">
+            <span class="photo-meta"><b>Mist Ridge</b><small>Yunnan, 2025</small></span>
+          </button>
+        </article>
+        <article class="photo-card tall" data-category="portrait">
+          <button class="photo-button" type="button" data-title="Soft Hour" data-place="Shanghai, 2026">
+            <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=70" alt="自然光下的人像摄影">
+            <span class="photo-meta"><b>Soft Hour</b><small>Shanghai, 2026</small></span>
+          </button>
+        </article>
+        <article class="photo-card" data-category="city">
+          <button class="photo-button" type="button" data-title="Night Crossing" data-place="Hong Kong, 2024">
+            <img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=70" alt="夜晚城市街道与霓虹">
+            <span class="photo-meta"><b>Night Crossing</b><small>Hong Kong, 2024</small></span>
+          </button>
+        </article>
+        <article class="photo-card" data-category="travel">
+          <button class="photo-button" type="button" data-title="Salt Wind" data-place="Xiamen, 2023">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=70" alt="海边浪花与天空">
+            <span class="photo-meta"><b>Salt Wind</b><small>Xiamen, 2023</small></span>
+          </button>
+        </article>
+        <article class="photo-card wide" data-category="city">
+          <button class="photo-button" type="button" data-title="Concrete Rain" data-place="Chongqing, 2025">
+            <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1200&q=70" alt="雨后城市天际线">
+            <span class="photo-meta"><b>Concrete Rain</b><small>Chongqing, 2025</small></span>
+          </button>
+        </article>
+        <article class="photo-card tall" data-category="portrait">
+          <button class="photo-button" type="button" data-title="Backstage Blue" data-place="Beijing, 2024">
+            <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=70" alt="蓝色背景前的人物肖像">
+            <span class="photo-meta"><b>Backstage Blue</b><small>Beijing, 2024</small></span>
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <section id="journal" class="journal">
+      <div class="section-head">
+        <p class="eyebrow">Field Notes</p>
+        <h2>拍摄手记</h2>
+      </div>
+      <div class="note-track">
+        <article>
+          <span>01</span>
+          <h3>只带一支 35mm</h3>
+          <p>限制焦段会逼迫身体移动，也会让街道和人物之间的距离更诚实。</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>等一阵风</h3>
+          <p>很多画面的决定性瞬间不是动作，而是光线、衣角和空气同时对齐。</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>夜色不要太满</h3>
+          <p>城市夜拍保留一点黑，霓虹才有呼吸，人物也不会被背景吞掉。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <div>
+      <p class="eyebrow">Booking</p>
+      <h2>一起完成下一组照片。</h2>
+    </div>
+    <a class="contact-link" href="mailto:hello@example.com">hello@example.com</a>
+  </footer>
+
+  <dialog class="lightbox" aria-label="作品预览">
+    <button class="close" type="button" aria-label="关闭预览">×</button>
+    <img alt="">
+    <div class="lightbox-caption">
+      <strong></strong>
+      <span></span>
+    </div>
+  </dialog>
+
+  <script src="./app.js"></script>
+</body>
+</html>
