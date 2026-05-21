@@ -35,6 +35,10 @@ function categoryLabel(category) {
   return { travel: "旅行", portrait: "人像", city: "城市" }[category] || category;
 }
 
+function rollLabel(roll) {
+  return siteData.rolls?.find((item) => item.id === roll)?.name || roll || "未分卷";
+}
+
 function imagePathFromUrl(value) {
   if (!value) return "";
   if (value.startsWith("./")) return value.slice(2);
@@ -52,7 +56,7 @@ function renderWorkManager() {
       <img src="${work.image}" alt="${work.alt || work.title}" loading="lazy">
       <div>
         <strong>${work.title}</strong>
-        <span>${work.place || "未填写地点"} · ${categoryLabel(work.category)}${work.featured ? " · 首页精选" : ""}</span>
+        <span>${work.place || "未填写地点"} · ${rollLabel(work.roll)} · ${categoryLabel(work.category)}${work.featured ? " · 首页精选" : ""}</span>
       </div>
       <button class="danger-btn" type="button" data-delete-work="${work.id}">删除</button>
     `;
@@ -162,6 +166,7 @@ async function uploadWork(form) {
     title: form.title.value.trim(),
     place: form.place.value.trim(),
     category: form.category.value,
+    roll: form.roll.value,
     layout: form.layout.value,
     featured: form.featured.checked,
     image: `./${imagePath}`,

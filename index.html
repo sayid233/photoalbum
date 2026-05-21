@@ -23,35 +23,54 @@
   </header>
 
   <main id="top">
-    <section class="hero" data-parallax>
-      <img data-profile-image="heroImage" src="" alt="摄影作品首图">
-      <div class="hero-copy">
-        <p class="eyebrow">Editorial / Travel / Portrait</p>
+    <section class="film-hero">
+      <div class="loop-stage" data-loop-stage aria-label="动图式摄影片段轮播">
+        <img src="" alt="摄影动图片段">
+        <div class="loop-scan" aria-hidden="true"></div>
+      </div>
+      <div class="film-hero-copy">
+        <p class="eyebrow">Color Photo Archive</p>
         <h1 data-profile="heroTitle"></h1>
+        <p data-profile="intro"></p>
         <div class="hero-actions">
-          <a class="btn primary" href="./works.html">全部作品</a>
-          <a class="btn ghost" href="./contact.html">预约拍摄</a>
+          <a class="btn primary" href="#rolls">选择胶卷</a>
+          <a class="btn ghost" href="./works.html">全部作品</a>
         </div>
       </div>
-      <div class="hero-strip" aria-label="精选数据">
-        <span><strong data-stat="works">0</strong> 组作品</span>
-        <span><strong data-stat="categories">0</strong> 个分类</span>
-        <span><strong data-stat="notes">0</strong> 篇手记</span>
+      <div class="hero-strip film-stats" aria-label="精选数据">
+        <span><strong data-stat="works">0</strong> Frames</span>
+        <span><strong data-stat="rolls">0</strong> Rolls</span>
+        <span><strong data-stat="notes">0</strong> Notes</span>
       </div>
     </section>
 
-    <section class="intro" aria-label="摄影师简介">
-      <p data-profile="intro"></p>
-      <div class="signal-line" aria-hidden="true"></div>
+    <section class="film-intro" aria-label="作品介绍">
+      <p>这里的每个胶卷是一组作品的入口：不是把同一张照片套上不同风格，而是把不同地点、人物和光线整理进各自的观看系统。</p>
+      <div class="film-specs" aria-label="作品属性">
+        <span>C-41 Color Negative</span>
+        <span>Still Photography</span>
+        <span>Personal Archive</span>
+      </div>
+    </section>
+
+    <section id="rolls" class="roll-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Color Photo C-41</p>
+          <h2>按胶卷进入作品</h2>
+        </div>
+        <a class="text-link" href="./works.html">全部归档</a>
+      </div>
+      <div class="roll-selector" data-rolls></div>
+      <div class="roll-preview" data-roll-preview></div>
     </section>
 
     <section class="work">
       <div class="section-head">
         <div>
           <p class="eyebrow">Selected Frames</p>
-          <h2>精选作品</h2>
+          <h2>近期精选</h2>
         </div>
-        <a class="text-link" href="./works.html">查看全部</a>
       </div>
       <div class="gallery" data-gallery="featured" aria-live="polite"></div>
     </section>
